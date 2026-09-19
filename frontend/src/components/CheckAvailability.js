@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, {useState} from "react";
 
 function CheckAvailability({
                                setStartDateTime,
@@ -13,7 +13,7 @@ function CheckAvailability({
     const [loading, setLoading] = useState(false);
     const [message, setMessage] = useState("");
 
-    const findAvailableCars = () => {
+    const findAvailableCars = async () => {
         if (!dateTime || !days) {
             setMessage("Please select a date/time and number of days.");
             return;
@@ -23,39 +23,39 @@ function CheckAvailability({
         setMessage("");
 
         const url =
-            `http://localhost:7070/api/availability` +
+            `http://localhost:7070/api/Cars/availability` +
             `?startDateTime=${encodeURIComponent(dateTime)}` +
             `&numberOfDays=${days}`;
 
-        fetch(url)
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error("Could not check availability");
-                }
+        try {
+            const response = await fetch(url);
 
-                return response.json();
-            })
-            .then(data => {
-                setAvailableCars(data);
+            const responseBody = await response.text();
 
-                // Send only the information that MakeReservation needs
-                setStartDateTime(dateTime);
-                setNumberOfDays(days);
-                setSelectedCarType("");
+            if (!response.ok) {
+                throw new Error(responseBody);
+            }
 
-                if (data.length === 0) {
-                    setMessage("No cars are available for this period.");
-                }
-            })
-            .catch(error => {
-                console.error("Error loading available cars:", error);
-                setMessage("Could not check availability.");
-            })
-            .finally(() => {
-                setLoading(false);
-            });
+            const data = JSON.parse(responseBody);
+
+            setAvailableCars(data);
+
+            // Send only the information that MakeReservation needs
+            setStartDateTime(dateTime);
+            setNumberOfDays(days);
+            setSelectedCarType("");
+
+            if (data.length === 0) {
+                setMessage("No cars are available for this period.");
+            }
+
+        } catch (error) {
+            console.error("Error loading available cars:", error);
+            setMessage(error.message);
+        } finally {
+            setLoading(false);
+        }
     };
-
     return (
         <div className="card shadow-sm">
             <div className="card-body p-4">

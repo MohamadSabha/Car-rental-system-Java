@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useState} from "react";
 
 function MakeReservation({
                              startDateTime,
@@ -22,7 +22,7 @@ function MakeReservation({
             );
     }, []);
 
-    const createReservation = () => {
+    const createReservation = async () => {
         setLoading(true);
         setMessage("");
         setSuccess(false);
@@ -34,40 +34,44 @@ function MakeReservation({
             numberOfDays: Number(numberOfDays)
         };
 
-        fetch("http://localhost:7070/api/reservations", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(request)
-        })
-            .then(async response => {
-                const text = await response.text();
-
-                if (!response.ok) {
-                    throw new Error(text || "Reservation failed");
+        try {
+            const response = await fetch(
+                "http://localhost:7070/api/reservations",
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(request)
                 }
+            );
 
-                return JSON.parse(text);
-            })
-            .then(reservation => {
-                setSuccess(true);
+            const responseBody = await response.text();
 
-                setMessage(
-                    `Reservation created successfully. Car ${reservation.carId} reserved.`
+            if (!response.ok) {
+                throw new Error(
+                    responseBody || "Reservation failed"
                 );
+            }
 
-                setSelectedClient("");
-                onReservationCreated();
+            const reservation = JSON.parse(responseBody);
 
-            })
-            .catch(error => {
-                console.error("Error creating reservation:", error);
-                setMessage("Reservation failed: " + error.message);
-            })
-            .finally(() => {
-                setLoading(false);
-            });
+            setSuccess(true);
+
+            setMessage(
+                `Reservation created successfully. Car ${reservation.carId} reserved.`
+            );
+
+            setSelectedClient("");
+            onReservationCreated();
+
+        } catch (error) {
+            console.error("Error creating reservation:", error);
+            setMessage("Reservation failed: " + error.message);
+
+        } finally {
+            setLoading(false);
+        }
     };
 
     const canReserve =

@@ -32,6 +32,10 @@ public class ReservationService {
         if (startDateTime == null) {
             throw new IllegalArgumentException("Start date/time is required");
         }
+        if (startDateTime.isBefore(LocalDateTime.now())) {
+            throw new IllegalArgumentException(
+                    "Reservation date/time cannot be in the past");
+        }
 
         Client client = databaseManager.getClientById(clientId);
 

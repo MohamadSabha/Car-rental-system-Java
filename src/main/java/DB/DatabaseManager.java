@@ -227,6 +227,7 @@ public class DatabaseManager {
 
         List<Car> cars = new ArrayList<>();
 
+//        check if the connection is only one or connectioning everytime
         try (Connection connection = getConnection();
              PreparedStatement statement =
                      connection.prepareStatement(sql)) {

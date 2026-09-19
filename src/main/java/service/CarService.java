@@ -2,11 +2,9 @@ package service;
 
 import DB.DatabaseManager;
 import Model.Car;
-import Model.Reservation;
 
 import java.sql.SQLException;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 public class CarService {
@@ -21,6 +19,7 @@ public class CarService {
             LocalDateTime startDateTime,
             int numberOfDays) throws SQLException {
 
+//        Business Validation
         if (startDateTime == null) {
             throw new IllegalArgumentException(
                     "Start date/time is required"
@@ -31,6 +30,10 @@ public class CarService {
             throw new IllegalArgumentException(
                     "Number of days must be greater than 0"
             );
+        }
+        if (startDateTime.isBefore(LocalDateTime.now())) {
+            throw new IllegalArgumentException(
+                    "Reservation date/time cannot be in the past");
         }
 
         LocalDateTime endDateTime =

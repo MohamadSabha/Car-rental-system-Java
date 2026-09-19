@@ -43,13 +43,17 @@ public class Main {
                 });
             });
 
+            config.routes.exception(IllegalArgumentException.class, (exception, ctx) -> {
+                ctx.status(400).result(exception.getMessage());
+            });
+
             config.routes.exception(Exception.class, (exception, ctx) -> {
                 exception.printStackTrace();
-                ctx.status(500).result(exception.getMessage());
+                ctx.status(500).result("Internal server error");
             });
 
 
-            config.routes.get("/api/availability", ctx -> carController.getAvailableCars(ctx));
+            config.routes.get("/api/Cars/availability", ctx -> carController.getAvailableCars(ctx));
 
             config.routes.get(
                     "/api/clients",

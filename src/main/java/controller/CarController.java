@@ -1,82 +1,3 @@
-//package controller;
-//
-//import Model.Car;
-//import service.CarService;
-//
-//import java.sql.SQLException;
-//import java.time.LocalDateTime;
-//import java.util.ArrayList;
-//import java.util.HashMap;
-//import java.util.List;
-//import java.util.Map;
-//
-//import io.javalin.http.Context;
-//
-//public class CarController {
-//
-//    private final CarService carService;
-//
-//    public CarController(CarService carService) {
-//        this.carService = carService;
-//    }
-//
-//    public void getAvailableCars(Context ctx) throws SQLException {
-//
-//        LocalDateTime startDateTime =
-//                LocalDateTime.parse(ctx.queryParam("startDateTime"));
-//
-//        int numberOfDays =
-//                Integer.parseInt(ctx.queryParam("numberOfDays"));
-//
-//        List<Car> availableCars =
-//                carService.getAvailableCars(
-//                        startDateTime,
-//                        numberOfDays
-//                );
-//
-//        List<CarTypeAvailability> result = new ArrayList<>();
-//
-//        for (Car car : availableCars) {
-//
-//            CarTypeAvailability existing = result.stream()
-//                    .filter(item ->
-//                            item.carTypeId == car.getCarType().getId())
-//                    .findFirst()
-//                    .orElse(null);
-//
-//            if (existing == null) {
-//                result.add(new CarTypeAvailability(
-//                        car.getCarType().getId(),
-//                        car.getCarType().getName(),
-//                        1
-//                ));
-//            } else {
-//                existing.availableCount++;
-//            }
-//        }
-//
-//        ctx.json(result);
-//    }
-//
-//    private static class CarTypeAvailability {
-//
-//        // data transfer object (DTO)
-//        private int carTypeId;
-//        private String carTypeName;
-//        private int availableCount;
-//
-//        public CarTypeAvailability(
-//                int carTypeId,
-//                String carTypeName,
-//                int availableCount) {
-//
-//            this.carTypeId = carTypeId;
-//            this.carTypeName = carTypeName;
-//            this.availableCount = availableCount;
-//        }
-//    }
-//}
-
 
 
 package controller;
@@ -86,6 +7,7 @@ import service.CarService;
 
 import java.sql.SQLException;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -103,16 +25,23 @@ public class CarController {
 
     public void getAvailableCars(Context ctx) throws SQLException {
 
-        LocalDateTime startDateTime =
-                LocalDateTime.parse(
-                        ctx.queryParam("startDateTime")
-                );
 
-        int numberOfDays =
-                Integer.parseInt(
-                        ctx.queryParam("numberOfDays")
-                );
+//        Format Validation
+        LocalDateTime startDateTime;
+        try {
+            startDateTime = LocalDateTime.parse(ctx.queryParam("startDateTime"));
+        } catch (DateTimeParseException | NullPointerException e) {
+            throw new IllegalArgumentException(
+                    "Invalid start date/time format");
+        }
 
+        int numberOfDays;
+        try {
+            numberOfDays = Integer.parseInt(ctx.queryParam("numberOfDays"));
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException(
+                    "Number of days must be a number");
+        }
         List<Car> availableCars =
                 carService.getAvailableCars(
                         startDateTime,

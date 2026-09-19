@@ -6,6 +6,7 @@ import io.javalin.http.Context;
 
 import java.sql.SQLException;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeParseException;
 import java.util.List;
 
 public class ReservationController {
@@ -41,6 +42,17 @@ public class ReservationController {
     public void createReservation(Context ctx) throws SQLException {
         ReservationRequest request =
                 ctx.bodyAsClass(ReservationRequest.class);
+
+        LocalDateTime startDateTime;
+        try {
+            startDateTime =
+                    LocalDateTime.parse(request.startDateTime);
+        } catch (DateTimeParseException e) {
+
+            throw new IllegalArgumentException(
+                    "Invalid start date/time format");
+        }
+
 
         Reservation reservation =
                 reservationService.createReservation(
