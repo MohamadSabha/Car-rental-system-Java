@@ -16,8 +16,7 @@ import static org.mockito.Mockito.*;
 class ReservationServiceTest {
 
     @Test
-    void shouldCreateReservationWhenCarIsAvailable()
-            throws Exception {
+    void shouldCreateReservationWhenCarIsAvailable() throws Exception {
 
         // Arrange
         DatabaseManager databaseManager = mock(DatabaseManager.class);
@@ -78,8 +77,7 @@ class ReservationServiceTest {
         );
     }
     @Test
-    void shouldRejectReservationWhenAllCarsAreOccupied()
-            throws Exception {
+    void shouldRejectReservationWhenAllCarsAreOccupied() throws Exception {
 
         // Arrange
         DatabaseManager databaseManager = mock(DatabaseManager.class);
@@ -120,8 +118,7 @@ class ReservationServiceTest {
                 .insertReservation(any(Reservation.class));
     }
     @Test
-    void shouldRejectReservationWhenNumberOfDaysIsInvalid()
-            throws Exception {
+    void shouldRejectReservationWhenNumberOfDaysIsInvalid() throws Exception {
 
         // Arrange
         DatabaseManager databaseManager = mock(DatabaseManager.class);
@@ -143,11 +140,8 @@ class ReservationServiceTest {
         verify(databaseManager, never())
                 .insertReservation(any(Reservation.class));
     }
-
-
     @Test
-    void shouldRejectReservationWhenStartDateIsInThePast()
-            throws Exception {
+    void shouldRejectReservationWhenStartDateIsInThePast() throws Exception {
 
         // Arrange
         DatabaseManager databaseManager = mock(DatabaseManager.class);

@@ -15,9 +15,7 @@ public class CarService {
         this.databaseManager = databaseManager;
     }
 
-    public List<Car> getAvailableCars(
-            LocalDateTime startDateTime,
-            int numberOfDays) throws SQLException {
+    public List<Car> getAvailableCars(LocalDateTime startDateTime, int numberOfDays) throws SQLException {
 
 //        Business Validation
         if (startDateTime == null) {

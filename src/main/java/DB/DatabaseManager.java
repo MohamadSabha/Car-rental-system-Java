@@ -12,6 +12,7 @@ import java.util.List;
 
 public class DatabaseManager {
 
+//    DATABASE_URL=jdbc:sqlite:car_rental.db
     private static final String DATABASE_URL =
             System.getenv("DATABASE_URL");
 
@@ -205,9 +206,7 @@ public class DatabaseManager {
     }
 
     ////////
-    public List<Car> getAvailableCars(
-            LocalDateTime startDateTime,
-            LocalDateTime endDateTime) throws SQLException {
+    public List<Car> getAvailableCars( LocalDateTime startDateTime,  LocalDateTime endDateTime) throws SQLException {
 
         String sql = """
             SELECT c.id,
@@ -254,10 +253,7 @@ public class DatabaseManager {
 
         return cars;
     }
-    public List<Car> getAvailableCarsByCarTypeId(
-            int carTypeId,
-            LocalDateTime startDateTime,
-            LocalDateTime endDateTime) throws SQLException {
+    public List<Car> getAvailableCarsByCarTypeId( int carTypeId,  LocalDateTime startDateTime, LocalDateTime endDateTime) throws SQLException {
 
 //        String sql = """
 //            SELECT c.id,

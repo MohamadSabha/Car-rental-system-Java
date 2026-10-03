@@ -52,23 +52,13 @@ public class Main {
                 ctx.status(500).result("Internal server error");
             });
 
+            config.routes.get("/api/Cars/availability", carController::getAvailableCars);
 
-            config.routes.get("/api/Cars/availability", ctx -> carController.getAvailableCars(ctx));
+            config.routes.get("/api/clients", clientController::getAllClients);
 
-            config.routes.get(
-                    "/api/clients",
-                    clientController::getAllClients
-            );
+            config.routes.get("/api/reservations", reservationController::getAllReservations);
 
-            config.routes.get(
-                    "/api/reservations",
-                    reservationController::getAllReservations
-            );
-
-            config.routes.post(
-                    "/api/reservations",
-                    reservationController::createReservation
-            );
+            config.routes.post("/api/reservations", reservationController::createReservation);
 
 
 
@@ -78,3 +68,23 @@ public class Main {
 
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+//config.routes.get("/api/Cars/availability", ctx -> carController.getAvailableCars(ctx));
+
+//            config.routes.get("/api/Cars/availability", new Handler() {
+//                @Override
+//                public void handle(Context ctx) {
+//                    carController.getAvailableCars(ctx);
+//                }
+//            });

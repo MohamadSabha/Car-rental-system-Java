@@ -8,7 +8,7 @@ import Reservations from "./components/Reservations";
 function App() {
     const [startDateTime, setStartDateTime] = useState("");
     const [numberOfDays, setNumberOfDays] = useState("");
-    const [selectedCarType, setSelectedCarType] = useState("");
+    const [selectedCarType, setSelectedCarType] = useState(null);
     const [refreshReservations, setRefreshReservations] = useState(0);
     return (
         <div className="bg-light min-vh-100">

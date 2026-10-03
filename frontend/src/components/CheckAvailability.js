@@ -43,8 +43,7 @@ function CheckAvailability({
             // Send only the information that MakeReservation needs
             setStartDateTime(dateTime);
             setNumberOfDays(days);
-            setSelectedCarType("");
-
+            setSelectedCarType(null);
             if (data.length === 0) {
                 setMessage("No cars are available for this period.");
             }
@@ -75,8 +74,13 @@ function CheckAvailability({
                             type="datetime-local"
                             className="form-control"
                             value={dateTime}
-                            onChange={event => setDateTime(event.target.value)}
-                        />
+                            onChange={event => {
+                                setDateTime(event.target.value);
+                                setAvailableCars([]);
+                                setSelectedCarType(null);
+                                setStartDateTime("");
+                                setNumberOfDays("");
+                            }}                        />
                     </div>
 
                     <div className="col-md-3">
@@ -89,8 +93,13 @@ function CheckAvailability({
                             className="form-control"
                             min="1"
                             value={days}
-                            onChange={event => setDays(event.target.value)}
-                        />
+                            onChange={event => {
+                                setDays(event.target.value);
+                                setAvailableCars([]);
+                                setSelectedCarType(null);
+                                setStartDateTime("");
+                                setNumberOfDays("");
+                            }}                        />
                     </div>
 
                     <div className="col-md-3 d-flex align-items-end">
@@ -118,10 +127,14 @@ function CheckAvailability({
 
                         <select
                             className="form-select"
-                            value={selectedCarType}
-                            onChange={event =>
-                                setSelectedCarType(event.target.value)
-                            }
+                            value={selectedCarType ? selectedCarType.carTypeId : ""}                            onChange={event => {
+                                const selectedCar = availableCars.find(
+                                    carType =>
+                                        carType.carTypeId === Number(event.target.value)
+                                );
+
+                                setSelectedCarType(selectedCar);
+                            }}
                         >
                             <option value="">
                                 Select a car type

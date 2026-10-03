@@ -61,7 +61,6 @@ public class CarController {
                     availabilityMap.get(carTypeId);
 
             if (existing == null) {
-
                 availabilityMap.put(
                         carTypeId,
                         new AvailableCarTypeCount(
@@ -83,9 +82,9 @@ public class CarController {
         );
     }
 
+    // data transfer object (DTO)
     private static class AvailableCarTypeCount {
 
-        // data transfer object (DTO)
         private int carTypeId;
         private String carTypeName;
         private int availableCount;

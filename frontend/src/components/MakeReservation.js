@@ -29,7 +29,7 @@ function MakeReservation({
 
         const request = {
             clientId: Number(selectedClient),
-            carTypeId: Number(selectedCarType),
+            carTypeId: selectedCarType.carTypeId,
             startDateTime: startDateTime,
             numberOfDays: Number(numberOfDays)
         };
@@ -130,8 +130,7 @@ function MakeReservation({
                             <input
                                 type="text"
                                 className="form-control"
-                                value={selectedCarType ? "Selected" : ""}
-                                placeholder="Select a car type above"
+                                value={selectedCarType ? selectedCarType.carTypeName : "No car selected"}
                                 disabled
                                 readOnly
                             />

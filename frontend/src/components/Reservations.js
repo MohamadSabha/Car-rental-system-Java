@@ -4,26 +4,28 @@ function Reservations({ refresh })
 { const [reservations, setReservations] = useState([]);
     const [loading, setLoading] = useState(true);
 
-    const loadReservations = () => {
+    const loadReservations = async () => {
         setLoading(true);
 
-        fetch("http://localhost:7070/api/reservations")
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error("Could not load reservations");
-                }
+        try {
+            const response = await fetch(
+                "http://localhost:7070/api/reservations"
+            );
 
-                return response.json();
-            })
-            .then(data => {
-                setReservations(data);
-            })
-            .catch(error => {
-                console.error("Error loading reservations:", error);
-            })
-            .finally(() => {
-                setLoading(false);
-            });
+            if (!response.ok) {
+                throw new Error("Could not load reservations");
+            }
+
+            const data = await response.json();
+
+            setReservations(data);
+
+        } catch (error) {
+            console.error("Error loading reservations:", error);
+
+        } finally {
+            setLoading(false);
+        }
     };
 
     useEffect(() => {
@@ -82,7 +84,8 @@ function Reservations({ refresh })
                                     <td>Client {reservation.clientId}</td>
 
                                     <td>
-                                        {reservation.clientFirstName} {reservation.clientLastName}
+                                        {reservation.clientFirstName}
+                                        {reservation.clientLastName}
                                     </td>
                                     <td>
                                         {reservation.carTypeName}
